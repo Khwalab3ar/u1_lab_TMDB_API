@@ -16,7 +16,7 @@ let detailKeys = (displayDetail.keys = [])
 let detailValues = (displayDetail.values = [])
 
 button.addEventListener('click', async () => {
-  insertMovie.innerHTML = ''
+  clear()
   let movie = input.value
   const result = await axios.get(
     `https://api.themoviedb.org/3/search/movie?query=${movie}&api_key=${API_KEY}`
@@ -34,6 +34,7 @@ const renderList = (result) => {
   // insert <div> into movie-list section
   for (let i = 0; i < movieAdded.length; i++) {
     const createDiv = document.createElement('div')
+    createDiv.setAttribute('class', 'movies')
     createDiv.innerHTML = `<img src=\'${IMAGE_BASE_PATH}${imageAdded[i]}\'> <p class=\'title\'>${movieAdded[i]}</p><button class=\'moreDetails\' id=\'${i}\'>More Details</button>`
     insertMovie.appendChild(createDiv)
   }
@@ -59,10 +60,9 @@ const createDetailDiv = (movieData, idLocation) => {
   console.log(movieData)
   displayDetail.keys = Object.keys(movieData)
   displayDetail.values = Object.values(movieData)
-  let wantedData = [0, 3, 10, 11, 12, 17, 19]
+  let wantedData = [0, 3, 10, 11, 17, 19]
   const createH1 = document.createElement('h1')
   createH1.innerHTML = displayDetail.values[21]
-  createH1.style.color = '#000'
   createH1.style.textAlign = 'center'
   popUpDiv.appendChild(createH1)
   for (let i = 0; i < wantedData.length; i++) {
@@ -75,7 +75,19 @@ const createDetailDiv = (movieData, idLocation) => {
 
 const exitDetail = () => {
   popUpDiv.addEventListener('click', function () {
+    popUpDiv.innerHTML = ''
     popUpDiv.setAttribute('class', '.nothing')
     blackBG.setAttribute('class', '.nothing')
   })
+}
+
+const clear = () => {
+  newList = {}
+  movieAdded = newList.movie = []
+  imageAdded = newList.image = []
+  idAdded = newList.id = []
+  displayDetail = {}
+  detailKeys = displayDetail.keys = []
+  detailValues = displayDetail.values = []
+  insertMovie.innerHTML = ''
 }
